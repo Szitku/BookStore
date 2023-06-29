@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup,Validators } from '@angular/forms';
+import { Route, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +15,7 @@ export class LoginComponent implements OnInit{
   eyeIcon: string = "fa-eye-slash"
   loginForm!: FormGroup;
 
-  constructor(private fb:FormBuilder){}
+  constructor(private fb:FormBuilder, private auth:AuthService,private router:Router){}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['',Validators.required],
@@ -27,9 +29,18 @@ export class LoginComponent implements OnInit{
     this.isText ? this.type = "text" : this.type = "password";
   }
 
-  onSubmit(){
+  onLogin(){
     if(this.loginForm.valid){
-      
+      this.auth.login(this.loginForm.value).subscribe({
+        next:(res) =>{
+          console.log(res.message + res.id);
+          this.loginForm.reset();
+          this.router.navigate(['books']);
+        },
+        error:(err)=>{
+          console.log(err.error);
+        }
+      })
     } else {
       this.validateAllFormFields(this.loginForm);
 

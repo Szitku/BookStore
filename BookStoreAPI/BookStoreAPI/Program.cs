@@ -16,7 +16,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 
 builder.Services.AddCors(p => p.AddPolicy("BooksOrigins",
-    policy => policy.WithOrigins("").AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
+    policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
 ));
 
 var app = builder.Build();

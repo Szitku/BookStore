@@ -41,5 +41,46 @@ namespace BookStoreAPI.Controllers
             return Ok("User deleted");
 
         }
+
+        [HttpPost()]
+        [Route("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] User userObj)
+        {
+            if (userObj == null)
+            {
+                return BadRequest("There was a problem with the request");
+            }
+
+            User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username && x.Password == userObj.Password);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            return Ok(new
+            {
+                Message = "Login sucessful",
+                id = user.Id,
+            });
+
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> register([FromBody] User userObj)
+        {
+            if (userObj == null)
+            {
+                return BadRequest("There was a problem with the request");
+            }
+            userObj.Role = "User";
+            await _dataContext.Users.AddAsync(userObj);
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "User registered"
+            });
+        }
     }
 }
