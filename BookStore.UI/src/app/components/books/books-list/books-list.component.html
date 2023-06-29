@@ -1,0 +1,24 @@
+<div class="container my-5">
+    <h1 class="mb-3">Books</h1>
+    <table class="table" *ngIf="books && books.length > 0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books">
+                <td>{{book.id}}</td>
+                <td>{{book.title}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.price}}</td>
+                <td><a [routerLink]="['editbook', book.id]">View</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="!books || books.length <= 0">No books found</p>
+</div>
