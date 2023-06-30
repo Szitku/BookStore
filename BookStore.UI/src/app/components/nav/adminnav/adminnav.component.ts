@@ -10,6 +10,6 @@ export class AdminnavComponent {
   constructor(private router: Router){}
 
   isLoginorRegisterPage() : Boolean {
-    return this.router.url.includes('/login') || this.router.url.includes('/register');
+    return this.router.url.includes('') || this.router.url.includes('/register');
   }
 }

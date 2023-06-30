@@ -1,4 +1,5 @@
 ﻿using BookStoreAPI.Data;
+using BookStoreAPI.Helpers;
 using BookStoreAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -73,7 +74,10 @@ namespace BookStoreAPI.Controllers
             {
                 return BadRequest("There was a problem with the request");
             }
+            
+            userObj.Password = PasswordHasher.HashPassword(userObj.Password);
             userObj.Role = "User";
+            userObj.Token = "";
             await _dataContext.Users.AddAsync(userObj);
             await _dataContext.SaveChangesAsync();
 

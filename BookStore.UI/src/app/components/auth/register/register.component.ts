@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit{
           next:(res) => {
             console.log(res)
             this.registerForm.reset();
-            this.router.navigate(['login']);
+            this.router.navigate(['']);
           },
           error:(err) => {
             console.log(err.error);
