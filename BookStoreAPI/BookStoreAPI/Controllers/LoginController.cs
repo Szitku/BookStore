@@ -52,17 +52,20 @@ namespace BookStoreAPI.Controllers
                 return BadRequest("There was a problem with the request");
             }
 
-            User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username && x.Password == userObj.Password);
-            if (user == null)
+            User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username);
+            bool passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
+            if (user != null && passwordok)
             {
-                return BadRequest("User not found");
+                return Ok(new
+                {
+                    Message = "Login sucessful",
+                    id = user.Id,
+                });
             }
 
-            return Ok(new
-            {
-                Message = "Login sucessful",
-                id = user.Id,
-            });
+            return BadRequest("User not found");
+
+
 
         }
 
