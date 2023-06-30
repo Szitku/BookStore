@@ -50,23 +50,28 @@ namespace BookStoreAPI.Controllers
         [Route("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] User userObj)
         {
+
+            bool passwordok = false;
             if (userObj == null)
             {
                 return BadRequest("There was a problem with the request");
             }
 
             User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username);
-            bool passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
+            if(user != null) passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
             if (user != null && passwordok)
             {
                 return Ok(new
                 {
-                    Message = "Login sucessful",
+                    Message = "Login sucessful!",
                     id = user.Id,
                 });
             }
 
-            return BadRequest("User not found");
+            return BadRequest(new
+            {
+                Message = "Username or password is wrong!"
+            });
 
 
 
@@ -135,9 +140,16 @@ namespace BookStoreAPI.Controllers
         {
             StringBuilder sb = new StringBuilder();
             if (password.Length < 8) sb.AppendLine("Minimum password length should be 8");
-            if (!(Regex.IsMatch(password, "[a-z]") && Regex.IsMatch(password, "[A-Z]") && Regex.IsMatch(password, "[0-9]"))) sb.AppendLine("Password should be alphanumeric");
-            if (!Regex.IsMatch(password, "[<,>,@,!,#,$,^^,&,*,(,),_,+,\\[,\\],{,},?,:,;,|,',\\,.,/,~,`,-,=] ")) sb.AppendLine("Password should contain atleast one ");
+            if (!password.Any(char.IsDigit)) sb.Append("Atleast one number");
+            if (!password.Any(char.IsUpper)) sb.Append("Atleast one upper character");
+            if (!password.Any(IsSpecialCharacter)) sb.Append("Atleast one special character");
+
             return sb.ToString();
+        }
+        private bool IsSpecialCharacter(char c)
+        {
+            char[] specialCharacters = { '@', '#', '$', '%', '&', '*' };
+            return specialCharacters.Contains(c);
         }
 
     }

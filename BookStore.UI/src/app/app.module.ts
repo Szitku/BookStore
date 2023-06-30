@@ -13,6 +13,7 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { OrdersComponent } from './components/books/orders-list/orders/orders.component';
 import { UsernavComponent } from './components/nav/usernav/usernav.component';
 import { AdminnavComponent } from './components/nav/adminnav/adminnav.component';
+import { NgToastModule } from 'ng-angular-popup';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AdminnavComponent } from './components/nav/adminnav/adminnav.component'
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgToastModule
   ],
   providers: [],
   bootstrap: [AppComponent]
