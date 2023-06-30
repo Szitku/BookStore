@@ -4,6 +4,9 @@ using BookStoreAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BookStoreAPI.Controllers
 {
@@ -77,7 +80,35 @@ namespace BookStoreAPI.Controllers
             {
                 return BadRequest("There was a problem with the request");
             }
-            
+            // Check username
+            if (await checkUserNameExistAsync(userObj.Username))
+            {
+                return BadRequest(new
+                {
+                    Message = "Username already exists!"
+                });
+            }
+            // Check email
+            if (await checkEmailExistAsync(userObj.Email))
+            {
+                return BadRequest(new
+                {
+                    Message = "Email is used by another account"
+                });
+            }
+            // Check password strength
+
+            string pass = checkPasswordStrengthAsync(userObj.Password);
+            if (!string.IsNullOrEmpty(pass)) 
+            {
+                return BadRequest(new
+                {
+                    Message = pass.ToString()
+                });
+            }
+
+
+            // Registering the user
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
             userObj.Role = "User";
             userObj.Token = "";
@@ -89,5 +120,25 @@ namespace BookStoreAPI.Controllers
                 message = "User registered"
             });
         }
+
+        private Task<bool> checkUserNameExistAsync(string username) 
+        {
+            return _dataContext.Users.AnyAsync(x => x.Username == username);
+        }
+
+        private Task<bool> checkEmailExistAsync(string email)
+        {
+            return _dataContext.Users.AnyAsync(x => x.Email == email);
+        }
+
+        private string checkPasswordStrengthAsync(string password) 
+        {
+            StringBuilder sb = new StringBuilder();
+            if (password.Length < 8) sb.AppendLine("Minimum password length should be 8");
+            if (!(Regex.IsMatch(password, "[a-z]") && Regex.IsMatch(password, "[A-Z]") && Regex.IsMatch(password, "[0-9]"))) sb.AppendLine("Password should be alphanumeric");
+            if (!Regex.IsMatch(password, "[<,>,@,!,#,$,^^,&,*,(,),_,+,\\[,\\],{,},?,:,;,|,',\\,.,/,~,`,-,=] ")) sb.AppendLine("Password should contain atleast one ");
+            return sb.ToString();
+        }
+
     }
 }
