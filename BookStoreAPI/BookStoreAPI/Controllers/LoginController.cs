@@ -27,7 +27,7 @@ namespace BookStoreAPI.Controllers
         {
             List<User> Users = await _dataContext.Users.ToListAsync();
             if (Users == null) {
-                return BadRequest("Users not found");
+                return BadRequest(new { Message = "User not found" });
             }
             return Ok(Users);
         }
@@ -38,7 +38,7 @@ namespace BookStoreAPI.Controllers
         {
             User userfound = await _dataContext.Users.FindAsync(id);
             if (userfound == null) {
-                return BadRequest("User not found");
+                return BadRequest(new {Message = "User not found"});
             }
             _dataContext.Users.Remove(userfound);
             _dataContext.SaveChanges();
@@ -54,7 +54,7 @@ namespace BookStoreAPI.Controllers
             bool passwordok = false;
             if (userObj == null)
             {
-                return BadRequest("There was a problem with the request");
+                return BadRequest(new { Message = "There was a problem with the request" });
             }
 
             User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username);
@@ -83,7 +83,7 @@ namespace BookStoreAPI.Controllers
         {
             if (userObj == null)
             {
-                return BadRequest("There was a problem with the request");
+                return BadRequest(new {Message = "There was a problem with the request" });
             }
             // Check username
             if (await checkUserNameExistAsync(userObj.Username))

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router} from '@angular/router';
 import { Book } from 'src/app/models/bookmodel';
 import { BooksService } from 'src/app/services/books.service';
@@ -10,7 +11,9 @@ import { BooksService } from 'src/app/services/books.service';
 })
 export class EditBookComponent implements OnInit {
   
+  
   book : Book = {
+    id: 0,
     title: '',
     author: '',
     cover: '',
@@ -18,25 +21,42 @@ export class EditBookComponent implements OnInit {
     price: 0
   }
 
-  constructor(private route : ActivatedRoute,private bookService:BooksService,private router : Router){}
+  editForm = new FormGroup({
+    id: new FormControl('bookid',Validators.required),
+    title: new FormControl('booktitle',Validators.required),
+    author: new FormControl('bookauthor',Validators.required),
+    cover: new FormControl('bookcover',Validators.required),
+    synopsis: new FormControl('booksynopsis',Validators.required),
+    price: new FormControl('bookprice',[
+      Validators.min(1),Validators.required
+    ]),
+  })
+
+  constructor(private route : ActivatedRoute,private bookService:BooksService,private router : Router,private fb : FormBuilder){}
   
   ngOnInit(): void {
       this.getBookbyId();
   }
 
   updateBook(){
+    this.formToBook();
+    if(this.editForm.valid){
       this.bookService.updateBook(this.book)
       .subscribe({
         next : (response) => {
           this.router.navigate(['books']);
         }
       })
+    }else{
+      this.validateAllFormFields(this.editForm);
+    }
+      
   }
 
   deleteBook(){
     if(this.book.id){
       this.bookService.deleteBook(this.book.id).subscribe({
-        next : (response) => {
+        next : () => {
           this.router.navigate(['books']);
         }
       })
@@ -50,9 +70,10 @@ export class EditBookComponent implements OnInit {
         if(id) {
           this.bookService.getBookbyId(id)
           .subscribe({
-            next : (book) => {
-              this.book = book;
+            next : (res) => {
+              this.book = res;
               this.book = this.trimBook(this.book);
+              this.bookToForm();
             }
           })
         }
@@ -60,11 +81,55 @@ export class EditBookComponent implements OnInit {
     })
   }
 
-  trimBook(book : Book) : Book {
+  private trimBook(book : Book) : Book {
     book.title = book.title.trim();
     book.author = book.author.trim();
     book.cover = book.cover.trim();
     book.synopsis = book.synopsis.trim();
     return book;
   }
+
+  private validateAllFormFields(formGroup:FormGroup){
+    Object.keys(formGroup.controls).forEach(field=>{
+      const control = formGroup.get(field);
+      if(control instanceof FormControl){
+        control.markAsDirty({onlySelf:true});
+      }else if(control instanceof FormGroup){
+        this.validateAllFormFields(control)
+      }
+    })}
+  private bookToForm(){
+    this.editForm.get('id')?.setValue(this.book.id.toString());
+    this.editForm.get('title')?.setValue(this.book.title);
+    this.editForm.get('author')?.setValue(this.book.author);
+    this.editForm.get('cover')?.setValue(this.book.cover);
+    this.editForm.get('synopsis')?.setValue(this.book.synopsis);
+    this.editForm.get('price')?.setValue(this.book.price.toString());
+  }
+  private formToBook(){
+    // biztos van jobb megoldas
+    let ind : string | null;
+    let num : number | string;
+    
+    ind = this.editForm.getRawValue().id;
+    num = ind !== null ? ind : "0";
+    this.book.id = Number.parseInt(num);
+
+    ind = this.editForm.getRawValue().title;
+    this.book.title = ind !== null ? ind : "";
+
+    ind = this.editForm.getRawValue().author;
+    this.book.author = ind !== null ? ind : "";
+
+    ind = this.editForm.getRawValue().cover;
+    this.book.cover = ind !== null ? ind : "";
+
+    ind = this.editForm.getRawValue().synopsis;
+    this.book.synopsis = ind !== null ? ind : "";
+
+    ind = this.editForm.getRawValue().price;
+    num = ind !== null ? ind : "0";
+    this.book.price = Number.parseInt(num);
+  }
+  
 }

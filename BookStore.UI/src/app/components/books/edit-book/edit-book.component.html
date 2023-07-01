@@ -1,33 +1,42 @@
-
-
 <div class="container my-5">
-    <h1 class="mb-3">Add new book</h1>
-    <form #form="ngForm"  (ngSubmit)="updateBook()">
-        <div class="form-group">
-            <label for="id" class="my-1">Id</label>
-            <input type="text" class="form-control" id="id" placeholder="Id" name="id" [(ngModel)]="book.id" readonly>
-          </div>
-        <div class="form-group">
-          <label for="title" class="my-1">Title</label>
-          <input type="text" class="form-control" id="title" placeholder="Title" name="title" [(ngModel)]="book.title">
-        </div>
-        <div class="form-group">
-          <label for="author" class="my-1">Author</label>
-          <input type="text" class="form-control" id="author" placeholder="Author" name="author" [(ngModel)]="book.author">
-        </div>
-        <div class="form-group">
-            <label for="cover" class="my-1">Cover link</label>
-            <textarea class="form-control" id="cover" rows="1" placeholder="Cover" name="cover" [(ngModel)]="book.cover"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="synopsis" class="my-1">Synopsis</label>
-            <textarea class="form-control" id="synopsis" rows="6" placeholder="Synopsis" name="synopsis" [(ngModel)]="book.synopsis"synopsis></textarea>
-        </div>
-        <div class="form-group">
-            <label for="price" class="my-1">Price</label>
-            <input type="number" class="form-control" id="price" placeholder="4000" min="0" name="price" [(ngModel)]="book.price"price>
-          </div>
-        <button type="submit" class="btn btn-primary my-2">Save</button>
-        <button type="button" class="btn btn-danger my-2 ms-1" (click)="deleteBook()">Delete</button>
-      </form>
+  <h1 class="mb-3">Edit book</h1>
+  
+  <form [formGroup]="editForm"  (ngSubmit)="updateBook()">
+    <div class="form-group">
+      <label for="id" class="my-1">Id</label>
+      <input type="text" class="form-control"  placeholder="Id" formControlName="id" readonly>
+    </div>
+    <small *ngIf="editForm.controls['id'].dirty && editForm.hasError('required','id')" class="text-danger">*Id is required</small>
+
+    <div class="input-field" [class.error]="editForm.controls['title'].dirty && editForm.hasError('required','title')">
+      <div class="form-group">
+        <label for="title" class="my-1">Title</label>
+        <input type="text" class="form-control"  placeholder="Title" formControlName="title">
+      </div>
+    </div>
+    <small *ngIf="editForm.controls['title'].dirty && editForm.hasError('required','title')" class="text-danger">*Title is required</small>
+    
+    <div class="form-group">
+      <label for="Author" class="my-1">Author</label>
+      <input type="text" class="form-control"  placeholder="Author" formControlName="author">
+    </div>
+    <small *ngIf="editForm.controls['author'].dirty && editForm.hasError('required','author')" class="text-danger">*Author is required</small>
+    <div class="form-group">
+      <label for="cover" class="my-1">Cover</label>
+      <textarea rows="1" type="text" class="form-control"  placeholder="Cover" formControlName="cover"></textarea>
+    </div>
+    <small *ngIf="editForm.controls['cover'].dirty && editForm.hasError('required','cover')" class="text-danger">*Cover is required</small>
+    <div class="form-group">
+      <label for="synopsis" class="my-1">Synopsis</label>
+      <textarea rows="6" type="text" class="form-control"  placeholder="Synopsis" formControlName="synopsis"></textarea>
+    </div>
+    <small *ngIf="editForm.controls['synopsis'].dirty && editForm.hasError('required','synopsis')" class="text-danger">*Synopsis is required</small>
+    <div class="form-group">
+      <label for="price" class="my-1">Price</label>
+      <input type="number" class="form-control"  placeholder="Price" formControlName="price" min="0">
+    </div>
+    <small *ngIf="editForm.controls['price'].dirty && editForm.hasError('min','price')" class="text-danger">*Price cannot be less than 1 currency</small>
+      <button type="submit" class="btn btn-primary my-2">Save</button>
+      <button type="button" class="btn btn-danger my-2 ms-1" (click)="deleteBook()">Delete</button>
+  </form>
 </div>

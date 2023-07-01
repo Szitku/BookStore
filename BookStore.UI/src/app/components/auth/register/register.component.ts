@@ -58,6 +58,5 @@ export class RegisterComponent implements OnInit{
       }else if(control instanceof FormGroup){
         this.validateAllFormFields(control)
       }
-    })
-}
+    })}
 }

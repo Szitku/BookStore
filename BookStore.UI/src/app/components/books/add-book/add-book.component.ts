@@ -11,6 +11,7 @@ import { BooksService } from 'src/app/services/books.service';
 export class AddBookComponent implements OnInit {
   
   newBook: Book = {
+    id: 0,
     title: '',
     author: '',
     cover: '',
