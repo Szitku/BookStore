@@ -2,41 +2,59 @@
   <h1 class="mb-3">Edit book</h1>
   
   <form [formGroup]="editForm"  (ngSubmit)="updateBook()">
-    <div class="form-group">
-      <label for="id" class="my-1">Id</label>
-      <input type="text" class="form-control"  placeholder="Id" formControlName="id" readonly>
-    </div>
-    <small *ngIf="editForm.controls['id'].dirty && editForm.hasError('required','id')" class="text-danger">*Id is required</small>
-
-    <div class="input-field" [class.error]="editForm.controls['title'].dirty && editForm.hasError('required','title')">
+    <div><label class="m-1" for="id">Id</label></div>
+    <div class="input-field m-1" [class.error]="editForm.controls['id'].dirty && editForm.hasError('required','id')">
       <div class="form-group">
-        <label for="title" class="my-1">Title</label>
+        <input type="text" class="form-control"  placeholder="Id" formControlName="id" readonly>
+      </div>
+    </div>
+    <small *ngIf="editForm.controls['id'].dirty && editForm.hasError('required','id')" class="text-danger m-3">*Id is required</small>
+
+    
+    <div><label class="m-1" for="title">Title</label></div>
+    <div class="input-field m-1" [class.error]="editForm.controls['title'].dirty && editForm.hasError('required','title')">
+      <div class="form-group">
         <input type="text" class="form-control"  placeholder="Title" formControlName="title">
       </div>
     </div>
-    <small *ngIf="editForm.controls['title'].dirty && editForm.hasError('required','title')" class="text-danger">*Title is required</small>
+    <small *ngIf="editForm.controls['title'].dirty && editForm.hasError('required','title')" class="text-danger m-3">*Title is required</small>
     
-    <div class="form-group">
-      <label for="Author" class="my-1">Author</label>
-      <input type="text" class="form-control"  placeholder="Author" formControlName="author">
+    <div><label class="m-1" for="author">Author</label></div>
+    <div class="input-field m-1" [class.error]="editForm.controls['author'].dirty && editForm.hasError('required','author')">
+      <div class="form-group">
+        <input type="text" class="form-control"  placeholder="Author" formControlName="author">
+      </div>
     </div>
-    <small *ngIf="editForm.controls['author'].dirty && editForm.hasError('required','author')" class="text-danger">*Author is required</small>
-    <div class="form-group">
-      <label for="cover" class="my-1">Cover</label>
-      <textarea rows="1" type="text" class="form-control"  placeholder="Cover" formControlName="cover"></textarea>
+    <small *ngIf="editForm.controls['author'].dirty && editForm.hasError('required','author')" class="text-danger m-3">*Author is required</small>
+    
+    <div><label class="m-1" for="cover">Cover</label></div>
+    <div class="input-field  m-1" [class.error]="editForm.controls['cover'].dirty && editForm.hasError('required','cover')">
+      <div class="form-group">
+        <textarea rows="1" type="text" class="form-control"  placeholder="Cover" formControlName="cover"></textarea>
+      </div>
     </div>
-    <small *ngIf="editForm.controls['cover'].dirty && editForm.hasError('required','cover')" class="text-danger">*Cover is required</small>
-    <div class="form-group">
-      <label for="synopsis" class="my-1">Synopsis</label>
-      <textarea rows="6" type="text" class="form-control"  placeholder="Synopsis" formControlName="synopsis"></textarea>
+    <small *ngIf="editForm.controls['cover'].dirty && editForm.hasError('required','cover')" class="text-danger m-3" >*Cover is required</small>
+
+    <div><label class="m-1" for="synopsis">Synopsis</label></div>
+    <div class="input-field m-1" [class.error]="editForm.controls['synopsis'].dirty && editForm.hasError('required','synopsis')">
+      <div class="form-group">
+        <textarea rows="6" type="text" class="form-control"  placeholder="Synopsis" formControlName="synopsis"></textarea>
+      </div>
     </div>
-    <small *ngIf="editForm.controls['synopsis'].dirty && editForm.hasError('required','synopsis')" class="text-danger">*Synopsis is required</small>
-    <div class="form-group">
-      <label for="price" class="my-1">Price</label>
-      <input type="number" class="form-control"  placeholder="Price" formControlName="price" min="0">
+    <small *ngIf="editForm.controls['synopsis'].dirty && editForm.hasError('required','synopsis')" class="text-danger m-3">*Synopsis is required</small>
+
+    <div><label class="m-1" for="price">Price</label></div>
+    <div class="input-field m-1" [class.error]="editForm.controls['price'].dirty && editForm.hasError('min','price')">
+      <div class="form-group">
+        <input type="number" class="form-control"  placeholder="Price" formControlName="price" min="0">
+      </div>
     </div>
-    <small *ngIf="editForm.controls['price'].dirty && editForm.hasError('min','price')" class="text-danger">*Price cannot be less than 1 currency</small>
+    <small *ngIf="editForm.controls['price'].dirty && editForm.hasError('min','price')" class="text-danger m-3">*Price cannot be less than 1 currency</small>
+
+    <div>
       <button type="submit" class="btn btn-primary my-2">Save</button>
       <button type="button" class="btn btn-danger my-2 ms-1" (click)="deleteBook()">Delete</button>
+    </div>
+      
   </form>
 </div>

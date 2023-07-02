@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router} from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { Book } from 'src/app/models/bookmodel';
 import { BooksService } from 'src/app/services/books.service';
 
@@ -32,7 +33,7 @@ export class EditBookComponent implements OnInit {
     ]),
   })
 
-  constructor(private route : ActivatedRoute,private bookService:BooksService,private router : Router,private fb : FormBuilder){}
+  constructor(private route : ActivatedRoute,private bookService:BooksService,private router : Router,private fb : FormBuilder,private toast: NgToastService){}
   
   ngOnInit(): void {
       this.getBookbyId();
@@ -43,21 +44,25 @@ export class EditBookComponent implements OnInit {
     if(this.editForm.valid){
       this.bookService.updateBook(this.book)
       .subscribe({
-        next : (response) => {
+        next : (res) => {
+          this.toast.success({detail:"Success",summary:res.message,duration:3000});
           this.router.navigate(['books']);
-        }
-      })
-    }else{
+        }, error : (err) => {
+          this.toast.error({detail:"Error",summary:err.error.message,duration:5000})
+        }}
+      )}else{
       this.validateAllFormFields(this.editForm);
     }
-      
   }
 
   deleteBook(){
     if(this.book.id){
       this.bookService.deleteBook(this.book.id).subscribe({
-        next : () => {
+        next : (res) => {
+          this.toast.success({detail:"Success",summary:res.message,duration:3000});
           this.router.navigate(['books']);
+        }, error : (err) =>{
+          this.toast.error({detail:"Error",summary:err.error.message,duration:5000})
         }
       })
     }

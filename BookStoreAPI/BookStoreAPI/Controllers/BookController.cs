@@ -24,17 +24,17 @@ namespace BookStoreAPI.Controllers
         public async Task<IActionResult> getBooks() {
             List<Book> bookslist = await _dataContext.Books.ToListAsync();
             if(bookslist == null) {
-                return BadRequest("Book not found.");
+                return BadRequest(new {Message = "Books not found!"});
             }
             return Ok(bookslist);
         }
 
         [HttpPost]
         [Route("addBook")]
-        public async Task<IActionResult> createBook(Book book) {
+        public async Task<IActionResult> createBook([FromBody]Book book) {
             _dataContext.Books.Add(book);
             await _dataContext.SaveChangesAsync();
-            return Ok(await _dataContext.Books.ToListAsync());
+            return Ok(new {Message = "Book was added!" });
         }
 
         [HttpPut]
@@ -43,7 +43,7 @@ namespace BookStoreAPI.Controllers
         {
             Book foundBook = await _dataContext.Books.FindAsync(book.Id);
             if (foundBook == null) {
-                return BadRequest("Book not found.");
+                return BadRequest(new {Message = "Book not found!"});
             }
 
             foundBook.Title = book.Title;
@@ -54,7 +54,7 @@ namespace BookStoreAPI.Controllers
 
             await _dataContext.SaveChangesAsync();
 
-            return Ok(await _dataContext.Books.ToListAsync());
+            return Ok(new {Message = "Book was updated"});
         }
 
         [HttpGet]
@@ -63,7 +63,7 @@ namespace BookStoreAPI.Controllers
         {
             Book book = await _dataContext.Books.FirstAsync(x => x.Id == id);
             if (book == null) {
-                return BadRequest("Book not found.");
+                return BadRequest(new {Message = "Book not found!"});
             }
             return Ok(book);
         }
@@ -74,12 +74,12 @@ namespace BookStoreAPI.Controllers
             Book foundBook = await _dataContext.Books.FindAsync(id);
             if (foundBook == null)
             {
-                return BadRequest("Book not found.");
+                return BadRequest(new{ Message = "Book not found!"});
             }
             _dataContext.Books.Remove(foundBook);
             await _dataContext.SaveChangesAsync();
 
-            return Ok(await _dataContext.Books.ToListAsync());
+            return Ok(new {Message = "Book was deleted!"});
         }
 
 

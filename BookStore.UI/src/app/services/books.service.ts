@@ -18,19 +18,19 @@ export class BooksService {
     return this.http.get<Book[]>(`${this.ApiURL}/api/Book/getBooks`)
   }
 
-  addBook(newBook : Book) : Observable<Book>{
-    return this.http.post<Book>(`${this.ApiURL}/api/Book/addBook`, newBook);
+  addBook(newBook : Book){
+    return this.http.post<any>(`${this.ApiURL}/api/Book/addBook`, newBook);
   }
 
   getBookbyId(id : number) : Observable<Book>{
     return this.http.get<Book>(`${this.ApiURL}/api/Book/getBookbyId/${id}`);
   }
 
-  updateBook(book : Book) : Observable<Book>{
-    return this.http.put<Book>(`${this.ApiURL}/api/Book/updateBook`, book);
+  updateBook(book : Book){
+    return this.http.put<any>(`${this.ApiURL}/api/Book/updateBook`, book);
   }
 
-  deleteBook(id : number) : Observable<Book>{
-    return this.http.delete<Book>(`${this.ApiURL}/api/Book/deleteBook/${id}`);
+  deleteBook(id : number){
+    return this.http.delete<any>(`${this.ApiURL}/api/Book/deleteBook/${id}`);
   }
 }
