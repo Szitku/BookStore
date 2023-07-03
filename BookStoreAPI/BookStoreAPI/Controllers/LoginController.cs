@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -42,7 +45,7 @@ namespace BookStoreAPI.Controllers
             }
             _dataContext.Users.Remove(userfound);
             _dataContext.SaveChanges();
-            return Ok("User deleted");
+            return Ok(new {Message = "User deleted"});
 
         }
 
@@ -58,13 +61,21 @@ namespace BookStoreAPI.Controllers
             }
 
             User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username);
-            if(user != null) passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
+
+            if (user != null) {
+                passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
+            }
+            
+
+            
+
             if (user != null && passwordok)
             {
+                user.Token = CreateJwtToken(user);
                 return Ok(new
                 {
                     Message = "Login sucessful!",
-                    id = user.Id,
+                    Token = user.Token
                 });
             }
 
@@ -150,6 +161,28 @@ namespace BookStoreAPI.Controllers
         {
             char[] specialCharacters = { '@', '#', '$', '%', '&', '*' };
             return specialCharacters.Contains(c);
+        }
+
+        private string CreateJwtToken(User user) 
+        {
+            JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
+            byte[] key = Encoding.ASCII.GetBytes("my-32-character-ultra-secure-and-ultra-long-secret");
+            ClaimsIdentity identity = new ClaimsIdentity(new Claim[] {
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
+            });
+
+            SigningCredentials credential = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = identity,
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = credential
+            };
+
+            SecurityToken token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            return jwtTokenHandler.WriteToken(token);
         }
 
     }
