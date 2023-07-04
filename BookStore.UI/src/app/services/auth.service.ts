@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { environment } from 'src/environments/environment';
+import { user } from '../models/user';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,7 @@ export class AuthService {
     this.toast.success({detail:"Success",summary:"Logged out"});
     this.route.navigate(['login']);
   }
+
 
   storeToken(tokenValue: string){
     localStorage.setItem('token', tokenValue)

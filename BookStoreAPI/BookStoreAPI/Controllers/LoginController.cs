@@ -1,6 +1,7 @@
 ﻿using BookStoreAPI.Data;
 using BookStoreAPI.Helpers;
 using BookStoreAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace BookStoreAPI.Controllers
             _dataContext = datacontext;
         }
 
-
+        [Authorize]
         [HttpGet]
         [Route("getUsers")]
         public async Task<IActionResult> getUsers() 
@@ -169,7 +170,7 @@ namespace BookStoreAPI.Controllers
             byte[] key = Encoding.ASCII.GetBytes("my-32-character-ultra-secure-and-ultra-long-secret");
             ClaimsIdentity identity = new ClaimsIdentity(new Claim[] {
                 new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
+                new Claim(ClaimTypes.Name,$"{user.Firstname} {user.Lastname}")
             });
 
             SigningCredentials credential = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);

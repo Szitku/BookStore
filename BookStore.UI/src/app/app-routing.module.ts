@@ -7,6 +7,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { OrdersComponent } from './components/books/orders-list/orders/orders.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { authGuard } from './guards/auth.guard';
+import { UsersListComponent } from './components/users/users-list/users-list.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: 'orders',
     component:OrdersComponent,
+    canActivate:[authGuard]
+  },
+  {
+    path: 'users',
+    component:UsersListComponent,
     canActivate:[authGuard]
   }
 ];

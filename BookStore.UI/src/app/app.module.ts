@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BooksListComponent } from './components/books/books-list/books-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AddBookComponent } from './components/books/add-book/add-book.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditBookComponent } from './components/books/edit-book/edit-book.component';
@@ -14,6 +14,8 @@ import { OrdersComponent } from './components/books/orders-list/orders/orders.co
 import { UsernavComponent } from './components/nav/usernav/usernav.component';
 import { AdminnavComponent } from './components/nav/adminnav/adminnav.component';
 import { NgToastModule } from 'ng-angular-popup';
+import { UsersListComponent } from './components/users/users-list/users-list.component';
+import { Tokeninterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { NgToastModule } from 'ng-angular-popup';
     RegisterComponent,
     OrdersComponent,
     UsernavComponent,
-    AdminnavComponent
+    AdminnavComponent,
+    UsersListComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,11 @@ import { NgToastModule } from 'ng-angular-popup';
     ReactiveFormsModule,
     NgToastModule
   ],
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:Tokeninterceptor,
+    multi:true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class BooksService {
 
-  ApiURL = environment.apiURL;
+  private ApiURL = environment.apiURL;
 
   constructor(private http: HttpClient) { }
 
