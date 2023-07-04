@@ -17,5 +17,16 @@ export class AuthService {
   login(userobj:any){
     return this.http.post<any>(`${this.ApiURL}/api/Login/authenticate`,userobj);
   }
+  storeToken(tokenValue: string){
+    localStorage.setItem('token', tokenValue)
+  }
+
+  getToken(){
+    return localStorage.getItem('token')
+  }
+
+  isLoggedIn() : boolean{
+    return !!localStorage.getItem('token')
+  }
 
 }

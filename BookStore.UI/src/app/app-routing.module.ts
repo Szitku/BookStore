@@ -6,12 +6,12 @@ import { EditBookComponent } from './components/books/edit-book/edit-book.compon
 import { LoginComponent } from './components/auth/login/login.component';
 import { OrdersComponent } from './components/books/orders-list/orders/orders.component';
 import { RegisterComponent } from './components/auth/register/register.component';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
      path: '', 
      component: LoginComponent,
-     pathMatch: 'full' 
   },
   {
     path: 'login',
@@ -23,7 +23,8 @@ const routes: Routes = [
   },
   {
     path: 'books',
-    component:BooksListComponent
+    component:BooksListComponent,
+    canActivate:[authGuard]
   },
   {
     path: 'addbook',

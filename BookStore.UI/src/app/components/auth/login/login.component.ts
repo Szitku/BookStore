@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit{
     if(this.loginForm.valid){
       this.auth.login(this.loginForm.value).subscribe({
         next:(res) =>{
+          this.auth.storeToken(res.token);
           this.toast.success({detail:"Success",summary:res.message,duration:5000})
-          console.log(res.message + res.id);
           this.loginForm.reset();
           this.router.navigate(['books']);
         },
