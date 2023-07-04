@@ -1,9 +1,17 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { NgToastService } from 'ng-angular-popup';
 
 
 
 export const authGuard: CanActivateFn = (route, state) => {
-  return inject(AuthService).isLoggedIn()
+  if(inject(AuthService).isLoggedIn()){
+    return true;
+  } else{
+    inject(NgToastService).error({detail:"ERROR", summary:"Please login before accessing this page!"});
+    inject(Router).navigate(['login']);
+    return false;
+  }
+  
 };

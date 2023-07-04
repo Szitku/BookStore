@@ -28,15 +28,18 @@ const routes: Routes = [
   },
   {
     path: 'addbook',
-    component:AddBookComponent
+    component:AddBookComponent,
+    canActivate:[authGuard]
   },
   {
     path: 'books/editbook/:id',
-    component:EditBookComponent
+    component:EditBookComponent,
+    canActivate:[authGuard]
   },
   {
     path: 'orders',
-    component:OrdersComponent
+    component:OrdersComponent,
+    canActivate:[authGuard]
   }
 ];
 
