@@ -32,7 +32,6 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false,
         ValidateIssuer = false,
         ClockSkew = TimeSpan.Zero,
-        
     };
 });
 

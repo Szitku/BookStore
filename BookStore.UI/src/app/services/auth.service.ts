@@ -5,13 +5,18 @@ import { NgToastService } from 'ng-angular-popup';
 import { environment } from 'src/environments/environment';
 import { user } from '../models/user';
 import { Observable } from 'rxjs/internal/Observable';
+import { JwtHelperService } from '@auth0/angular-jwt'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  ApiURL = environment.apiURL;
-  constructor(private http: HttpClient,private route:Router,private toast:NgToastService) { }
+  private ApiURL = environment.apiURL;
+  private userPayLoad:any;
+
+  constructor(private http: HttpClient,private route:Router,private toast:NgToastService) { 
+    this.userPayLoad = this.decodeToken();
+  }
 
 
   register(userObj:any){
@@ -39,6 +44,24 @@ export class AuthService {
 
   isLoggedIn() : boolean{
     return !!localStorage.getItem('token')
+  }
+
+  decodeToken(){
+    const jwthelper = new JwtHelperService();
+    const token = this.getToken()!;
+
+    console.log(jwthelper.decodeToken(token))
+    return jwthelper.decodeToken(token)
+  }
+
+  getNameFromToken(){
+    if(this.userPayLoad)
+    return this.userPayLoad.unique_name;
+  }
+
+  getRoleFromToken() : string{
+    if(this.userPayLoad && typeof(this.userPayLoad.role) === 'string') return this.userPayLoad.role
+    return "User";
   }
 
 }

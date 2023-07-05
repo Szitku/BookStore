@@ -7,7 +7,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" routerLink="books">Books<span class="sr-only"></span></a>
           </li>
           <li class="nav-item">
@@ -19,12 +19,17 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="users">Users</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link disabled white">Hello, {{name}}!</a>
+          </li>
           <li class="nav-item" *ngIf="loggedin()">
-            <button class="button nav-link" (click)="logout()" >Logout</button>
+            <button class="button nav-link white" (click)="logout()" >Logout</button>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 </ng-container>
+
+
 

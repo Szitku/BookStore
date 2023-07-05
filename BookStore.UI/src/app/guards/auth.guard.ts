@@ -6,7 +6,7 @@ import { NgToastService } from 'ng-angular-popup';
 
 
 export const authGuard: CanActivateFn = (route, state) => {
-  if(inject(AuthService).isLoggedIn()){
+  if(inject(AuthService).isLoggedIn() && inject(AuthService).getRoleFromToken() === 'Admin'){
     return true;
   } else{
     inject(NgToastService).error({detail:"ERROR", summary:"Please login before accessing this page!"});
