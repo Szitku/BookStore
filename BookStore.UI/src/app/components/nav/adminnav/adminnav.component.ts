@@ -11,7 +11,6 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 export class AdminnavComponent implements OnInit {
 
   public name : string = "";
-  public role : string = "";
 
   constructor(private router: Router,private auth : AuthService,private userstore : UserStoreService){}
 
@@ -19,11 +18,6 @@ export class AdminnavComponent implements OnInit {
       this.userstore.getNameFromStore().subscribe(indname =>{
         let namefromtoken = this.auth.getNameFromToken();
         this.name = indname || namefromtoken;
-      })
-
-      this.userstore.getRoleFromStore().subscribe(indrole =>{
-        let rolefromtoken = this.auth.getRoleFromToken();
-        this.role = indrole || rolefromtoken;
       })
   }
 

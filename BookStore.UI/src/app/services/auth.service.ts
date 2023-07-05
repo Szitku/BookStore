@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { user } from '../models/user';
 import { Observable } from 'rxjs/internal/Observable';
 import { JwtHelperService } from '@auth0/angular-jwt'
+import { UserStoreService } from './user-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,9 @@ import { JwtHelperService } from '@auth0/angular-jwt'
 export class AuthService {
   private ApiURL = environment.apiURL;
   private userPayLoad:any;
+  
 
-  constructor(private http: HttpClient,private route:Router,private toast:NgToastService) { 
+  constructor(private http: HttpClient,private route:Router,private toast:NgToastService,private userstore : UserStoreService) { 
     this.userPayLoad = this.decodeToken();
   }
 
@@ -49,8 +51,6 @@ export class AuthService {
   decodeToken(){
     const jwthelper = new JwtHelperService();
     const token = this.getToken()!;
-
-    console.log(jwthelper.decodeToken(token))
     return jwthelper.decodeToken(token)
   }
 
@@ -59,9 +59,9 @@ export class AuthService {
     return this.userPayLoad.unique_name;
   }
 
-  getRoleFromToken() : string{
+  getRoleFromToken(){
     if(this.userPayLoad && typeof(this.userPayLoad.role) === 'string') return this.userPayLoad.role
-    return "User";
+    return 'User';
   }
 
 }
