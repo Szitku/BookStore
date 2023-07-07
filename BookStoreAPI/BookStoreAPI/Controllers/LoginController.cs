@@ -1,6 +1,7 @@
 ﻿using BookStoreAPI.Data;
 using BookStoreAPI.Helpers;
 using BookStoreAPI.Models;
+using BookStoreAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,17 @@ namespace BookStoreAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly DataContext _dataContext;
+        private readonly JwtTokenHelper _jwtTokenHelper;
         public LoginController(DataContext datacontext)
         {
+            _jwtTokenHelper = new JwtTokenHelper(datacontext);
             _dataContext = datacontext;
         }
 
         [Authorize]
         [HttpGet]
         [Route("getUsers")]
-        public async Task<IActionResult> getUsers() 
+        public async Task<IActionResult> getUsers()
         {
             List<User> Users = await _dataContext.Users.ToListAsync();
             if (Users == null) {
@@ -36,17 +39,19 @@ namespace BookStoreAPI.Controllers
             return Ok(Users);
         }
 
+
+
         [HttpDelete]
         [Route("deleteUser/{id}")]
         public async Task<IActionResult> deleteUserbyId(int id)
         {
             User userfound = await _dataContext.Users.FindAsync(id);
             if (userfound == null) {
-                return BadRequest(new {Message = "User not found"});
+                return BadRequest(new { Message = "User not found" });
             }
             _dataContext.Users.Remove(userfound);
             _dataContext.SaveChanges();
-            return Ok(new {Message = "User deleted"});
+            return Ok(new { Message = "User deleted" });
 
         }
 
@@ -66,23 +71,57 @@ namespace BookStoreAPI.Controllers
             if (user != null) {
                 passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
             }
-            
 
-            
+
+
 
             if (user != null && passwordok)
             {
-                user.Token = CreateJwtToken(user);
-                return Ok(new
+                user.Token = _jwtTokenHelper.CreateJwtToken(user);
+                string newAcessToken = user.Token;
+                string newRefreshToken = _jwtTokenHelper.CreateRefreshToken();
+                user.RefreshToken = newRefreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(5);
+                await _dataContext.SaveChangesAsync();
+
+                return Ok(new TokenApiDto()
                 {
-                    Message = "Login sucessful!",
-                    Token = user.Token
+                    AccessToken = newAcessToken,
+                    RefreshToken = newRefreshToken
                 });
             }
 
             return BadRequest(new
             {
                 Message = "Username or password is wrong!"
+            });
+
+
+
+        }
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<IActionResult> RefreshToken(TokenApiDto tokenApiDto) 
+        {
+            if (tokenApiDto == null) return BadRequest(new { Message = "Invalid request" });
+            string accessToken = tokenApiDto.AccessToken;
+            string refreshToken = tokenApiDto.RefreshToken;
+
+            ClaimsPrincipal principal = _jwtTokenHelper.GetPrincipleFromExpiredToken(accessToken);
+            string username = principal.Identity.Name;
+            User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == username);
+            if(user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime  <= DateTime.Now)  return BadRequest(new { Message = "Invalid request"});
+
+            string newAccessToken = _jwtTokenHelper.CreateJwtToken(user);
+            string newRefreshToken = _jwtTokenHelper.CreateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(new TokenApiDto() {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
             });
 
 
@@ -164,27 +203,7 @@ namespace BookStoreAPI.Controllers
             return specialCharacters.Contains(c);
         }
 
-        private string CreateJwtToken(User user) 
-        {
-            JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.ASCII.GetBytes("my-32-character-ultra-secure-and-ultra-long-secret");
-            ClaimsIdentity identity = new ClaimsIdentity(new Claim[] {
-                new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.Name,$"{user.Firstname} {user.Lastname}")
-            });
-
-            SigningCredentials credential = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
-
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = identity,
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = credential
-            };
-
-            SecurityToken token = jwtTokenHandler.CreateToken(tokenDescriptor);
-            return jwtTokenHandler.WriteToken(token);
-        }
+        
 
     }
 }

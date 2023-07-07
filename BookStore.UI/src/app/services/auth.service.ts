@@ -7,6 +7,7 @@ import { user } from '../models/user';
 import { Observable } from 'rxjs/internal/Observable';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { UserStoreService } from './user-store.service';
+import { TokenApiModel } from '../models/token-apimodel';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +40,21 @@ export class AuthService {
   storeToken(tokenValue: string){
     localStorage.setItem('token', tokenValue)
   }
+  
+  storeRefreshToken(tokenValue: string){
+    localStorage.setItem('refreshtoken', tokenValue)
+  }
 
   getToken(){
-    return localStorage.getItem('token')
+    let token = localStorage.getItem('token');
+    if(token === null) token = "";
+    return token;
+  }
+
+  getRefreshToken(){
+    let token = localStorage.getItem('refreshtoken');
+    if(token === null) token = "";
+    return token;
   }
 
   isLoggedIn() : boolean{
@@ -62,6 +75,10 @@ export class AuthService {
   getRoleFromToken(){
     if(this.userPayLoad && typeof(this.userPayLoad.role) === 'string') return this.userPayLoad.role
     return 'User';
+  }
+
+  renewToken(TokenApi : TokenApiModel){
+    return this.http.post<any>(`${this.ApiURL}/api/Login/refresh`,TokenApi);
   }
 
 }

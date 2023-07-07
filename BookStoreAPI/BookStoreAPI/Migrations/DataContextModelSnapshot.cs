@@ -61,9 +61,6 @@ namespace BookStoreAPI.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -76,14 +73,7 @@ namespace BookStoreAPI.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -126,27 +116,6 @@ namespace BookStoreAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.Order", b =>
-                {
-                    b.HasOne("BookStoreAPI.Models.Book", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("BookId");
-
-                    b.HasOne("BookStoreAPI.Models.User", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.Book", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.User", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
