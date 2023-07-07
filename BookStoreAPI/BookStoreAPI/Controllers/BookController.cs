@@ -23,6 +23,7 @@ namespace BookStoreAPI.Controllers
         [Route("getBooks")]
         public async Task<IActionResult> getBooks() {
             List<Book> bookslist = await _dataContext.Books.ToListAsync();
+            List<Order> orderslist = await _dataContext.Orders.ToListAsync();
             if(bookslist == null) {
                 return BadRequest(new {Message = "Books not found!"});
             }
