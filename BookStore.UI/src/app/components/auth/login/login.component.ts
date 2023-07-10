@@ -82,7 +82,17 @@ export class LoginComponent implements OnInit{
   }
   clickToSendReset(){
     if(this.checkValidEmail(this.resetPasswordEmail)){
-      
+      console.log(this.resetPasswordEmail);
+
+      // Clearing the modul and closing
+      this.resetPasswordEmail = "";
+      this.isValidPasswordEmail = true;
+      const buttonRef = document.getElementById("closeBtn");
+      buttonRef?.click();
+      this.toast.success({detail:"Success",summary:"Password reset has been sent!"});
+
+    } else if(this.isValidPasswordEmail === false){
+      this.toast.error({detail:"Error",summary:"This is not a correct email check the warning under the email field",duration:5000})
     }
   }
 }
