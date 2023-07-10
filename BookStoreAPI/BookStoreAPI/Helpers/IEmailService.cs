@@ -1,6 +1,10 @@
-﻿namespace BookStoreAPI.Helpers
+﻿using BookStoreAPI.Models;
+
+namespace BookStoreAPI.Helpers
 {
-    public class IEmailService
+    public interface IEmailService
     {
+        void SendEmail(Email emailModel);
+
     }
 }

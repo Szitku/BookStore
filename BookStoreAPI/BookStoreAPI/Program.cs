@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddCors(p => p.AddPolicy("BooksOrigins",
     policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
 ));

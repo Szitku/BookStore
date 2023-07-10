@@ -21,10 +21,14 @@ namespace BookStoreAPI.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly JwtTokenHelper _jwtTokenHelper;
-        public LoginController(DataContext datacontext)
+        private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
+        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService)
         {
             _jwtTokenHelper = new JwtTokenHelper(datacontext);
             _dataContext = datacontext;
+            _configuration = configuration;
+            _emailService = emailService;
         }
 
         [Authorize]
@@ -176,6 +180,67 @@ namespace BookStoreAPI.Controllers
                 message = "User registered"
             });
         }
+        [HttpPost("sendresetemail/{email}")]
+        public async Task<IActionResult> SendEmail(string email)
+        {
+            User user = await _dataContext.Users.FirstOrDefaultAsync(a => a.Email == email);
+            if (user == null) 
+            {
+                return BadRequest(new { 
+                    StatusCode = 404,
+                    Message = "There is no user registered with that email!"
+                });
+            }
+            byte[] tokenBytes = RandomNumberGenerator.GetBytes(64);
+            string emailToken = Convert.ToBase64String(tokenBytes);
+            user.ResetPasswordToken = emailToken;
+            user.ResetPasswordTokenExpiryTime = DateTime.Now.AddMinutes(15);
+            string from = _configuration["EmailSettings:From"];
+            Email emailModel = new Email(email, "BookStore:Reset Password", EmailBody.EmailStringBody(email,emailToken));
+            _emailService.SendEmail(emailModel);
+            _dataContext.Entry(user).State = EntityState.Modified;
+            await _dataContext.SaveChangesAsync();
+            return Ok(new
+            {
+                StatusCode = 200,
+                Message = "Email Sent!"
+            });
+        }
+
+        [HttpPost("resetpassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto) 
+        {
+            string newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
+            User user = await _dataContext.Users.AsNoTracking().FirstOrDefaultAsync(a => a.Email == resetPasswordDto.Email);
+            if (user == null) 
+            {
+                return NotFound(new { 
+                    StatusCode = 404,
+                    Message = "User doesn't exist"
+                });
+            }
+            string tokenCode = user.ResetPasswordToken;
+            DateTime emailTokenExpiry = user.ResetPasswordTokenExpiryTime;
+            if (tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now) 
+            {
+                return BadRequest(new { 
+                    StatusCode = 400,
+                    Message = "Link is no longer valid"
+                });
+            }
+
+            user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+            _dataContext.Entry(user).State = EntityState.Modified;
+            await _dataContext.SaveChangesAsync();
+            return Ok(new
+            {
+                StatusCode = 200,
+                Message = "Password was successful"
+            });
+        }
+
+
+
 
         private Task<bool> checkUserNameExistAsync(string username) 
         {
