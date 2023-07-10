@@ -4,7 +4,7 @@
     {
         public static string EmailStringBody(string email, string emailToken) 
         {
-            return "";
+            return $"http://localhost:4200/reset?email={email}&code={emailToken}";
         }
     }
 }

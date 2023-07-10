@@ -22,7 +22,7 @@ export class AdminnavComponent implements OnInit {
   }
 
   isLoginorRegisterPage() : Boolean {
-    return this.router.url.includes('/login') || this.router.url.includes('/register') || this.router.url === '/';
+    return this.router.url.includes('/login') || this.router.url.includes('/register') || this.router.url.includes('/reset') || this.router.url === "/";
   }
 
   logout(){

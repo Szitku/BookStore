@@ -8,6 +8,7 @@ import { OrdersComponent } from './components/books/orders-list/orders/orders.co
 import { RegisterComponent } from './components/auth/register/register.component';
 import { authGuard } from './guards/auth.guard';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
+import { ResetComponent } from './components/auth/reset/reset.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'register',
     component:RegisterComponent
+  },
+  {
+    path: 'reset',
+    component:ResetComponent
   },
   {
     path: 'books',

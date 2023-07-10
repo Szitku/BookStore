@@ -16,6 +16,7 @@ import { AdminnavComponent } from './components/nav/adminnav/adminnav.component'
 import { NgToastModule } from 'ng-angular-popup';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
 import { Tokeninterceptor } from './interceptors/token.interceptor';
+import { ResetComponent } from './components/auth/reset/reset.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { Tokeninterceptor } from './interceptors/token.interceptor';
     OrdersComponent,
     UsernavComponent,
     AdminnavComponent,
-    UsersListComponent
+    UsersListComponent,
+    ResetComponent
   ],
   imports: [
     BrowserModule,
