@@ -81,3 +81,7 @@ D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\runtimes\win
 D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\MailKit.dll
+D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\MimeKit.dll
+D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\NETCore.MailKit.dll
+D:\Projects\BookStoreAPI\BookStoreAPI\BookStoreAPI\bin\Debug\net6.0\BouncyCastle.Crypto.dll

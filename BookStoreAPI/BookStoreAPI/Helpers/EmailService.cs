@@ -1,6 +1,7 @@
 ﻿using BookStoreAPI.Models;
 using MailKit.Net.Smtp;
 using MimeKit;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BookStoreAPI.Helpers
 {
@@ -20,14 +21,14 @@ namespace BookStoreAPI.Helpers
             emailMessage.Subject = emailModel.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = string.Format(emailModel.Content)
+                Text = emailModel.Content
             };
 
             using(SmtpClient client = new SmtpClient())
             {
                 try
                 {
-                    client.Connect(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:Port"]), true);
+                    client.Connect(_configuration["EmailSettings:SmtpServer"], 465, true);
                     client.Authenticate(_configuration["EmailSettings:From"], _configuration["EmailSettings:Password"]);
                     client.Send(emailMessage);
                 }

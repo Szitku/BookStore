@@ -220,7 +220,7 @@ namespace BookStoreAPI.Controllers
                 });
             }
             string tokenCode = user.ResetPasswordToken;
-            DateTime emailTokenExpiry = user.ResetPasswordTokenExpiryTime;
+            DateTime? emailTokenExpiry = user.ResetPasswordTokenExpiryTime;
             if (tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now) 
             {
                 return BadRequest(new { 
@@ -264,7 +264,7 @@ namespace BookStoreAPI.Controllers
         }
         private bool IsSpecialCharacter(char c)
         {
-            char[] specialCharacters = { '@', '#', '$', '%', '&', '*' };
+            char[] specialCharacters = { '@', '#', '$', '%', '&', '*', '-', '+' };
             return specialCharacters.Contains(c);
         }
 
