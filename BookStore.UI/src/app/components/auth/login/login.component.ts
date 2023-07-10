@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit{
   isText: boolean = false;
   eyeIcon: string = "fa-eye-slash"
   loginForm!: FormGroup;
+  resetPasswordEmail : string = "";
+  isValidPasswordEmail : boolean = true;
 
   constructor(private fb:FormBuilder, private auth:AuthService,private router:Router,private toast: NgToastService,private userstore : UserStoreService){}
   ngOnInit(): void {
@@ -70,5 +72,17 @@ export class LoginComponent implements OnInit{
           this.validateAllFormFields(control)
         }
       })
+  }
+
+  checkValidEmail(event : string){
+      const value = event;
+      const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      this.isValidPasswordEmail = pattern.test(value);
+      return this.isValidPasswordEmail;
+  }
+  clickToSendReset(){
+    if(this.checkValidEmail(this.resetPasswordEmail)){
+      
+    }
   }
 }
