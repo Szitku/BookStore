@@ -25,13 +25,36 @@
                             </div>
                             <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required','password')" class="text-danger">*Password is required</small>
                             <div class="form-inline fr mt-4">
-                                <a id="forget" class="font-weight-bold">Forget Password?</a>
+                                <a id="forget" class="font-weight-bold" data-bs-toggle="modal" data-bs-target="#forgetModal">Forgot Password?</a>
                             </div>
                             <button (click)="onLogin()" type="submit" class="btn btn-primary btn-block mt-4 w-100">Login</button>
                             <div class="text-center pt-4 text-muted">Don't have account?<a id="register" routerLink="/register">Register</a></div>
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="forgetModal" tableindex="-1" aria-labelledby="forgetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="exampleModalLabel">
+                    <span style="font-size: 25px;font-weight:700">Forgot your password?</span><br>
+                    <small>Please provide your E-mail which your account was made with!</small>
+                </p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group pt-3">
+                    <div class="input-field"><span class="fa fa-user p-2"></span><input type="text" placeholder="Email"></div>
+                </div>
+                <small class="text-danger">*Email is required</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send</button>
             </div>
         </div>
     </div>
