@@ -235,7 +235,7 @@ namespace BookStoreAPI.Controllers
             return Ok(new
             {
                 StatusCode = 200,
-                Message = "Password was successful"
+                Message = "Password change was successful"
             });
         }
 

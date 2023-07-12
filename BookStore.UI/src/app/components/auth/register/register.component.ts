@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup,Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
+import { validateAllFormFields } from 'src/app/helpers/validateformvields';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -45,18 +46,7 @@ export class RegisterComponent implements OnInit{
           }
         })
     } else {
-      this.validateAllFormFields(this.registerForm);
+      validateAllFormFields(this.registerForm);
     }
   }
-
-
-  private validateAllFormFields(formGroup:FormGroup){
-    Object.keys(formGroup.controls).forEach(field=>{
-      const control = formGroup.get(field);
-      if(control instanceof FormControl){
-        control.markAsDirty({onlySelf:true});
-      }else if(control instanceof FormGroup){
-        this.validateAllFormFields(control)
-      }
-    })}
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup,Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
+import { validateAllFormFields } from 'src/app/helpers/validateformvields';
 import { AuthService } from 'src/app/services/auth.service';
 import { ResetPasswordService } from 'src/app/services/reset-password.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
@@ -40,40 +41,32 @@ export class LoginComponent implements OnInit{
         next:(res) =>{
           this.auth.storeToken(res.accessToken);
           const tokenPayload = this.auth.decodeToken();
+          
 
           this.auth.storeToken(res.accessToken);
           this.auth.storeRefreshToken(res.refreshToken);
 
           this.userstore.setNameFromStore(tokenPayload.unique_name);
+          
           this.userstore.setRoleFromStore(tokenPayload.role);
           this.userstore.setIdFromStore(tokenPayload.nameid);
+          
+          console.log(tokenPayload);
+         
 
           this.toast.success({detail:"Success",summary:"Login success",duration:5000})
           this.loginForm.reset();
           this.router.navigate(['books']);
         },
         error:(err)=>{
-          console.log(err);
           this.toast.error({detail:"Error",summary:err.error.message,duration:5000})
-          console.log(err.error);
         }
       })
     } else {
-      this.validateAllFormFields(this.loginForm);
-
+      validateAllFormFields(this.loginForm);
     }
   }
 
-  private validateAllFormFields(formGroup:FormGroup){
-      Object.keys(formGroup.controls).forEach(field=>{
-        const control = formGroup.get(field);
-        if(control instanceof FormControl){
-          control.markAsDirty({onlySelf:true});
-        }else if(control instanceof FormGroup){
-          this.validateAllFormFields(control)
-        }
-      })
-  }
 
   checkValidEmail(event : string){
       const value = event;

@@ -7,18 +7,14 @@ import { UserStoreService } from '../services/user-store.service';
 
 
 export const authGuard: CanActivateFn = (route, state) => {
-  inject(UserStoreService).setRoleFromStore(inject(AuthService).getRoleFromToken());
-  let role : string = "";
-  inject(UserStoreService).getRoleFromStore().subscribe(indrole =>{
-    role = indrole;
-  })
+  let role : string = ""
+  inject(UserStoreService).getRoleFromStore().subscribe(val => {role = val})
 
   if(inject(AuthService).isLoggedIn() && role === 'Admin'){
     return true;
   } else{
     inject(NgToastService).error({detail:"ERROR", summary:"Please login before accessing this page!"});
     inject(Router).navigate(['login']);
-    console.log(inject(AuthService).isLoggedIn());
     return false;
   }
   
