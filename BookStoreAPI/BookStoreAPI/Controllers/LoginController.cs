@@ -281,7 +281,6 @@ namespace BookStoreAPI.Controllers
 
 
 
-
         private Task<bool> checkUserNameExistAsync(string username) 
         {
             return _dataContext.Users.AnyAsync(x => x.Username == username);
