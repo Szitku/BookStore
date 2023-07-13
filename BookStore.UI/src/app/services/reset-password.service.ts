@@ -17,4 +17,7 @@ export class ResetPasswordService {
   resetPassword(resetPasswordmodel : resetpasswordmodel){
     return this.http.post<any>(`${this.baseUrl}/api/login/resetpassword`, resetPasswordmodel)
   }
+  resetTokenExpired(resetPasswordmodel : resetpasswordmodel){
+    return this.http.post<any>(`${this.baseUrl}/api/login/resetTokenExpired`, resetPasswordmodel)
+  }
 }

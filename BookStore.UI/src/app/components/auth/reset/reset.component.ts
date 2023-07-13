@@ -34,6 +34,19 @@ export class ResetComponent implements OnInit {
       let urlToken = val['code'];
       this.emailToken = urlToken.replace(/ /g,'+');
     })
+
+    this.resetPasswordObj.email = this.emailToReset;
+    this.resetPasswordObj.emailtoken = this.emailToken;
+    this.resetPasswordObj.newPassword = this.newpasswordForm.value.password;
+    this.resetPasswordObj.confirmPassword = this.newpasswordForm.value.confirmPassword;
+
+    this.resetService.resetTokenExpired(this.resetPasswordObj).subscribe({
+      error:(err =>{
+        this.toast.error({detail: 'Error',summary: err.error.message,duration: 5000,});
+        this.router.navigate(['/login']);
+      })
+    });
+    
   }
 
   onNewPassword(){

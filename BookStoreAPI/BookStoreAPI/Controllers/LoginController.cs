@@ -249,6 +249,36 @@ namespace BookStoreAPI.Controllers
             });
         }
 
+        [HttpPost("resetTokenExpired")]
+        public async Task<IActionResult> resetTokenExpired(ResetPasswordDto resetPasswordDto) 
+        {
+            string newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
+            User user = await _dataContext.Users.AsNoTracking().FirstOrDefaultAsync(a => a.Email == resetPasswordDto.Email);
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "User doesn't exist"
+                });
+            }
+            string tokenCode = user.ResetPasswordToken;
+            DateTime? emailTokenExpiry = user.ResetPasswordTokenExpiryTime;
+            if (tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = 400,
+                    Message = "Link is no longer valid"
+                });
+            }
+            else 
+            {
+                return Ok();
+            }
+
+        }
+
 
 
 
