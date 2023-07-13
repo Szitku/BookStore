@@ -228,8 +228,18 @@ namespace BookStoreAPI.Controllers
                     Message = "Link is no longer valid"
                 });
             }
+            string passwordErrors = checkPasswordStrengthAsync(resetPasswordDto.ConfirmPassword);
+            if (passwordErrors != "") 
+            {
+                return BadRequest(new { 
+                    StatusCode = 406,
+                    Message = passwordErrors
+                });
+            }
 
             user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+            user.ResetPasswordToken = null;
+            user.ResetPasswordTokenExpiryTime = null;
             _dataContext.Entry(user).State = EntityState.Modified;
             await _dataContext.SaveChangesAsync();
             return Ok(new
@@ -256,9 +266,9 @@ namespace BookStoreAPI.Controllers
         {
             StringBuilder sb = new StringBuilder();
             if (password.Length < 8) sb.AppendLine("Minimum password length should be 8");
-            if (!password.Any(char.IsDigit)) sb.Append("Atleast one number");
-            if (!password.Any(char.IsUpper)) sb.Append("Atleast one upper character");
-            if (!password.Any(IsSpecialCharacter)) sb.Append("Atleast one special character");
+            if (!password.Any(char.IsDigit)) sb.AppendLine("Atleast one number");
+            if (!password.Any(char.IsUpper)) sb.AppendLine("Atleast one upper character");
+            if (!password.Any(IsSpecialCharacter)) sb.AppendLine("Atleast one special character");
 
             return sb.ToString();
         }

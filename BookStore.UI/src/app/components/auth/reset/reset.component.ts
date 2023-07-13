@@ -48,17 +48,17 @@ export class ResetComponent implements OnInit {
           this.toast.success({detail: 'Success',summary: res.message,duration: 3000,});
           this.router.navigate(['/login']);
         }, error:(err) => {
-            if(err.status === 400 || err.status === 404){
+            if(err.error.statusCode === 400 || err.error.statusCode === 404){
               this.toast.error({detail: 'Error',summary: err.error.message,duration: 5000,});
               this.router.navigate(['/login']);
+            } else if (err.error.statusCode === 406){
+              this.toast.error({detail: 'Error',summary: err.error.message,duration: 5000,});
             }
         }
       })
 
     }else {
       validateAllFormFields(this.newpasswordForm);
-
-      
     }
   }
 

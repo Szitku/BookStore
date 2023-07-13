@@ -20,7 +20,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 
-
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
