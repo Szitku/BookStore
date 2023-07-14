@@ -20,6 +20,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,7 +38,8 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddScoped  <IEmailService, EmailService>();
+builder.Services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddCors(p => p.AddPolicy("BooksOrigins",
     policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
 ));

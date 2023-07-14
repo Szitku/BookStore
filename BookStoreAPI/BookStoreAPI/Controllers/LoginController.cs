@@ -20,12 +20,12 @@ namespace BookStoreAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly DataContext _dataContext;
-        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly IJwtTokenHelper _jwtTokenHelper;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
-        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService)
+        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService, IJwtTokenHelper jwtTokenHelper)
         {
-            _jwtTokenHelper = new JwtTokenHelper(datacontext);
+            _jwtTokenHelper = jwtTokenHelper;
             _dataContext = datacontext;
             _configuration = configuration;
             _emailService = emailService;
@@ -83,7 +83,7 @@ namespace BookStoreAPI.Controllers
             {
                 user.Token = _jwtTokenHelper.CreateJwtToken(user);
                 string newAcessToken = user.Token;
-                string newRefreshToken = _jwtTokenHelper.CreateRefreshToken();
+                string newRefreshToken = _jwtTokenHelper.CreateRefreshToken(await _dataContext.Users.ToListAsync());
                 user.RefreshToken = newRefreshToken;
                 user.RefreshTokenExpiryTime = DateTime.Now.AddDays(5);
                 await _dataContext.SaveChangesAsync();
@@ -118,7 +118,7 @@ namespace BookStoreAPI.Controllers
             if(user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime  <= DateTime.Now)  return BadRequest(new { Message = "Invalid request"});
 
             string newAccessToken = _jwtTokenHelper.CreateJwtToken(user);
-            string newRefreshToken = _jwtTokenHelper.CreateRefreshToken();
+            string newRefreshToken = _jwtTokenHelper.CreateRefreshToken(await _dataContext.Users.ToListAsync());
 
             user.RefreshToken = newRefreshToken;
             await _dataContext.SaveChangesAsync();

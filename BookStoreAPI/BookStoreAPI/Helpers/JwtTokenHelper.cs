@@ -10,12 +10,6 @@ namespace BookStoreAPI.Helpers
 {
     public class JwtTokenHelper : IJwtTokenHelper
     {
-        private readonly DataContext _dataContext;
-        public JwtTokenHelper(DataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
-
         public string CreateJwtToken(User user)
         {
             JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -39,15 +33,15 @@ namespace BookStoreAPI.Helpers
             return jwtTokenHandler.WriteToken(token);
         }
 
-        public string CreateRefreshToken()
+        public string CreateRefreshToken(List<User> users)
         {
             byte[] tokenBytes = RandomNumberGenerator.GetBytes(64);
             string refreshToken = Convert.ToBase64String(tokenBytes);
 
-            bool tokenInUser = _dataContext.Users.Any(a => a.RefreshToken == refreshToken);
+            bool tokenInUser = users.Any(a => a.RefreshToken == refreshToken);
             if (tokenInUser)
             {
-                return CreateRefreshToken();
+                return CreateRefreshToken(users);
             }
 
             return refreshToken;
