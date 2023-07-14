@@ -39,6 +39,7 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddScoped<IValidateCredentials, ValidateCredentials>();
 builder.Services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

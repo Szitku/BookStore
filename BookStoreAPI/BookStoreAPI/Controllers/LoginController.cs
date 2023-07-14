@@ -25,13 +25,15 @@ namespace BookStoreAPI.Controllers
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IPasswordHasher _passwordHasher;
-        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService, IJwtTokenHelper jwtTokenHelper, IPasswordHasher passwordHasher)
+        private readonly IValidateCredentials _validateCredentials;
+        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService, IJwtTokenHelper jwtTokenHelper, IPasswordHasher passwordHasher, IValidateCredentials validateCredentials)
         {
             _jwtTokenHelper = jwtTokenHelper;
             _dataContext = datacontext;
             _configuration = configuration;
             _emailService = emailService;
             _passwordHasher = passwordHasher;
+            _validateCredentials = validateCredentials;
         }
 
         [Authorize]
@@ -144,7 +146,7 @@ namespace BookStoreAPI.Controllers
                 return BadRequest(new {Message = "There was a problem with the request" });
             }
             // Check username
-            if (await checkUserNameExistAsync(userObj.Username))
+            if (await _validateCredentials.checkUserNameExistAsync(userObj.Username,_dataContext.Users))
             {
                 return BadRequest(new
                 {
@@ -152,7 +154,7 @@ namespace BookStoreAPI.Controllers
                 });
             }
             // Check email
-            if (await checkEmailExistAsync(userObj.Email))
+            if (await _validateCredentials.checkEmailExistAsync(userObj.Email,_dataContext.Users))
             {
                 return BadRequest(new
                 {
@@ -161,7 +163,7 @@ namespace BookStoreAPI.Controllers
             }
             // Check password strength
 
-            string pass = checkPasswordStrengthAsync(userObj.Password);
+            string pass = _validateCredentials.checkPasswordStrength(userObj.Password);
             if (!string.IsNullOrEmpty(pass)) 
             {
                 return BadRequest(new
@@ -231,7 +233,7 @@ namespace BookStoreAPI.Controllers
                     Message = "Link is no longer valid"
                 });
             }
-            string passwordErrors = checkPasswordStrengthAsync(resetPasswordDto.ConfirmPassword);
+            string passwordErrors = _validateCredentials.checkPasswordStrength(resetPasswordDto.ConfirmPassword);
             if (passwordErrors != "") 
             {
                 return BadRequest(new { 
@@ -282,33 +284,6 @@ namespace BookStoreAPI.Controllers
 
         }
 
-
-
-        private Task<bool> checkUserNameExistAsync(string username) 
-        {
-            return _dataContext.Users.AnyAsync(x => x.Username == username);
-        }
-
-        private Task<bool> checkEmailExistAsync(string email)
-        {
-            return _dataContext.Users.AnyAsync(x => x.Email == email);
-        }
-
-        private string checkPasswordStrengthAsync(string password) 
-        {
-            StringBuilder sb = new StringBuilder();
-            if (password.Length < 8) sb.AppendLine("Minimum password length should be 8");
-            if (!password.Any(char.IsDigit)) sb.AppendLine("Atleast one number");
-            if (!password.Any(char.IsUpper)) sb.AppendLine("Atleast one upper character");
-            if (!password.Any(IsSpecialCharacter)) sb.AppendLine("Atleast one special character");
-
-            return sb.ToString();
-        }
-        private bool IsSpecialCharacter(char c)
-        {
-            char[] specialCharacters = { '@', '#', '$', '%', '&', '*', '-', '+' };
-            return specialCharacters.Contains(c);
-        }
 
         
 
