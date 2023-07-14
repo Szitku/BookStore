@@ -1,4 +1,5 @@
-﻿using BookStoreAPI.Models;
+﻿using BookStoreAPI.Interfaces;
+using BookStoreAPI.Models;
 using MailKit.Net.Smtp;
 using MimeKit;
 using static System.Net.Mime.MediaTypeNames;
@@ -34,7 +35,7 @@ namespace BookStoreAPI.Helpers
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    throw ex;
                 }
                 finally
                 {

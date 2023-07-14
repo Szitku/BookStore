@@ -1,5 +1,6 @@
 using BookStoreAPI.Data;
 using BookStoreAPI.Helpers;
+using BookStoreAPI.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,8 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
 builder.Services.AddCors(p => p.AddPolicy("BooksOrigins",
     policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
 ));

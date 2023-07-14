@@ -1,5 +1,6 @@
 ﻿using BookStoreAPI.Data;
 using BookStoreAPI.Helpers;
+using BookStoreAPI.Interfaces;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -23,12 +24,14 @@ namespace BookStoreAPI.Controllers
         private readonly IJwtTokenHelper _jwtTokenHelper;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
-        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService, IJwtTokenHelper jwtTokenHelper)
+        private readonly IPasswordHasher _passwordHasher;
+        public LoginController(DataContext datacontext, IConfiguration configuration, IEmailService emailService, IJwtTokenHelper jwtTokenHelper, IPasswordHasher passwordHasher)
         {
             _jwtTokenHelper = jwtTokenHelper;
             _dataContext = datacontext;
             _configuration = configuration;
             _emailService = emailService;
+            _passwordHasher = passwordHasher;
         }
 
         [Authorize]
@@ -73,7 +76,7 @@ namespace BookStoreAPI.Controllers
             User user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == userObj.Username);
 
             if (user != null) {
-                passwordok = PasswordHasher.VerifyPassword(userObj.Password, user.Password);
+                passwordok = _passwordHasher.VerifyPassword(userObj.Password, user.Password);
             }
 
 
@@ -169,7 +172,7 @@ namespace BookStoreAPI.Controllers
 
 
             // Registering the user
-            userObj.Password = PasswordHasher.HashPassword(userObj.Password);
+            userObj.Password = _passwordHasher.HashPassword(userObj.Password);
             userObj.Role = "User";
             userObj.Token = "";
             await _dataContext.Users.AddAsync(userObj);
@@ -237,7 +240,7 @@ namespace BookStoreAPI.Controllers
                 });
             }
 
-            user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+            user.Password = _passwordHasher.HashPassword(resetPasswordDto.NewPassword);
             user.ResetPasswordToken = null;
             user.ResetPasswordTokenExpiryTime = null;
             _dataContext.Entry(user).State = EntityState.Modified;

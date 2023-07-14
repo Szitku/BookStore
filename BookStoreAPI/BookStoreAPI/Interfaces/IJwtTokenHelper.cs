@@ -1,7 +1,7 @@
 ﻿using BookStoreAPI.Models;
 using System.Security.Claims;
 
-namespace BookStoreAPI.Helpers
+namespace BookStoreAPI.Interfaces
 {
     public interface IJwtTokenHelper
     {

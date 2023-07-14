@@ -1,6 +1,6 @@
 ﻿using BookStoreAPI.Models;
 
-namespace BookStoreAPI.Helpers
+namespace BookStoreAPI.Interfaces
 {
     public interface IEmailService
     {
