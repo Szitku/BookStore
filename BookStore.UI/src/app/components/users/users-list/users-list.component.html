@@ -3,24 +3,26 @@
     <table class="table" *ngIf="users && users.length > 0">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Username</th>
-                <th>Role</th>
-                <th>Email</th>
+                <th scope="col">Id</th>
+                <th scope="col">Firstname</th>
+                <th scope="col">Lastname</th>
+                <th scope="col">Username</th>
+                <th scope="col">Role</th>
+                <th scope="col">Email</th>
+                <th scope="col">Delete user</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let user of users">
-                <td>{{user.id}}</td>
+                <th scope="row">{{user.id}}</th>
                 <td>{{user.firstname}}</td>
                 <td>{{user.lastname}}</td>
                 <td>{{user.username}}</td>
                 <td>{{user.role}}</td>
                 <td>{{user.email}}</td>
+                <td><button class="btn btn-danger" (click)="onClickDelete(user.id!)">Delete</button></td>
             </tr>
         </tbody>
     </table>
-    <p *ngIf="!users || users.length <= 0">No books found</p>
+    <p *ngIf="!users || users.length <= 0">No users found</p>
 </div>

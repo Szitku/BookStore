@@ -50,10 +50,7 @@ export class LoginComponent implements OnInit{
           
           this.userstore.setRoleFromStore(tokenPayload.role);
           this.userstore.setIdFromStore(tokenPayload.nameid);
-          
-          console.log(tokenPayload);
-         
-
+        
           this.toast.success({detail:"Success",summary:"Login success",duration:5000})
           this.loginForm.reset();
           this.router.navigate(['books']);

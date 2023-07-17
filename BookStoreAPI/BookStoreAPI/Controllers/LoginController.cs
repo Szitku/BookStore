@@ -36,34 +36,6 @@ namespace BookStoreAPI.Controllers
             _validateCredentials = validateCredentials;
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("getUsers")]
-        public async Task<IActionResult> getUsers()
-        {
-            List<User> Users = await _dataContext.Users.ToListAsync();
-            if (Users == null) {
-                return BadRequest(new { Message = "User not found" });
-            }
-            return Ok(Users);
-        }
-
-
-
-        [HttpDelete]
-        [Route("deleteUser/{id}")]
-        public async Task<IActionResult> deleteUserbyId(int id)
-        {
-            User userfound = await _dataContext.Users.FindAsync(id);
-            if (userfound == null) {
-                return BadRequest(new { Message = "User not found" });
-            }
-            _dataContext.Users.Remove(userfound);
-            _dataContext.SaveChanges();
-            return Ok(new { Message = "User deleted" });
-
-        }
-
         [HttpPost()]
         [Route("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] User userObj)
