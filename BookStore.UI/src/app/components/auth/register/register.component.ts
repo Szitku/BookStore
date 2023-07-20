@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit{
           next:(res) => {
             this.toast.success({detail:"Success",summary:res.message,duration:3000})
             this.registerForm.reset();
-            this.router.navigate(['']);
+            this.router.navigate(['login']);
           },
           error:(err) => {
             this.toast.error({detail:"Error",summary:err.error.message,duration:5000})

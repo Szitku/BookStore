@@ -9,11 +9,12 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { authGuard } from './guards/auth.guard';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
 import { ResetComponent } from './components/auth/reset/reset.component';
+import { FrontpageComponent } from './components/store/frontpage/frontpage.component';
 
 const routes: Routes = [
   {
      path: '', 
-     component: LoginComponent,
+     component: FrontpageComponent,
   },
   {
     path: 'login',

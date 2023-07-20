@@ -32,8 +32,13 @@ export class AuthService {
 
   logout(){
     localStorage.clear();
+
+    this.userstore.setRoleFromStore(this.getRoleFromToken());
+    this.userstore.setNameFromStore(this.getNameFromToken());
+    this.userstore.setIdFromStore(this.getIdFromToken());
+
     this.toast.success({detail:"Success",summary:"Logged out"});
-    this.route.navigate(['login']);
+    this.route.navigate(['']);
   }
 
 
@@ -43,6 +48,10 @@ export class AuthService {
   
   storeRefreshToken(tokenValue: string){
     localStorage.setItem('refreshtoken', tokenValue)
+  }
+
+  renewToken(TokenApi : TokenApiModel){
+    return this.http.post<any>(`${this.ApiURL}/api/Login/refresh`,TokenApi);
   }
 
   getToken(){
@@ -68,17 +77,19 @@ export class AuthService {
   }
 
   getNameFromToken(){
-    if(this.userPayLoad)
-    return this.userPayLoad.unique_name;
+    if(this.userPayLoad && typeof(this.userPayLoad.unique_name) === 'string') return this.userPayLoad.unique_name
+    return '';
   }
 
-  getRoleFromToken(){
+  getRoleFromToken() : string{
     if(this.userPayLoad && typeof(this.userPayLoad.role) === 'string') return this.userPayLoad.role
     return 'User';
   }
 
-  renewToken(TokenApi : TokenApiModel){
-    return this.http.post<any>(`${this.ApiURL}/api/Login/refresh`,TokenApi);
+  getIdFromToken() : number{
+    if(this.userPayLoad && typeof(this.userPayLoad.nameid) === 'number') return this.userPayLoad.number
+    return 0;
   }
+
 
 }

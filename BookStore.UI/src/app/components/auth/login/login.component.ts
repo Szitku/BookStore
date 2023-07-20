@@ -39,21 +39,27 @@ export class LoginComponent implements OnInit{
     if(this.loginForm.valid){
       this.auth.login(this.loginForm.value).subscribe({
         next:(res) =>{
-          this.auth.storeToken(res.accessToken);
-          const tokenPayload = this.auth.decodeToken();
-          
+          // storing the token
 
           this.auth.storeToken(res.accessToken);
           this.auth.storeRefreshToken(res.refreshToken);
 
-          this.userstore.setNameFromStore(tokenPayload.unique_name);
+          // decode the token
+          const tokenPayload = this.auth.decodeToken();
           
+          // getting data from payload
+          this.userstore.setNameFromStore(tokenPayload.unique_name);
           this.userstore.setRoleFromStore(tokenPayload.role);
           this.userstore.setIdFromStore(tokenPayload.nameid);
         
+          if(tokenPayload.role === 'Admin'){
+            this.router.navigate(["/books"]);
+          } else {
+            this.router.navigate([""]);
+          }
+          
           this.toast.success({detail:"Success",summary:"Login success",duration:5000})
           this.loginForm.reset();
-          this.router.navigate(['books']);
         },
         error:(err)=>{
           this.toast.error({detail:"Error",summary:err.error.message,duration:5000})

@@ -17,6 +17,8 @@ import { NgToastModule } from 'ng-angular-popup';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
 import { Tokeninterceptor } from './interceptors/token.interceptor';
 import { ResetComponent } from './components/auth/reset/reset.component';
+import { FrontpageComponent } from './components/store/frontpage/frontpage.component';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { ResetComponent } from './components/auth/reset/reset.component';
     UsernavComponent,
     AdminnavComponent,
     UsersListComponent,
-    ResetComponent
+    ResetComponent,
+    FrontpageComponent
+
   ],
   imports: [
     BrowserModule,

@@ -11,18 +11,24 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 export class AdminnavComponent implements OnInit {
 
   public name : string = "";
+  public role : string = "";
 
-  constructor(private router: Router,private auth : AuthService,private userstore : UserStoreService){}
+  constructor(private auth : AuthService,private userstore : UserStoreService){}
 
   ngOnInit(): void {
       this.userstore.getNameFromStore().subscribe(indname =>{
         let namefromtoken = this.auth.getNameFromToken();
         this.name = indname || namefromtoken;
       })
+      this.userstore.getRoleFromStore().subscribe(indrole => {
+        let rolefromtoken = this.auth.getRoleFromToken();
+        this.role = indrole || rolefromtoken;
+        console.log(this.role);
+      });
   }
 
-  isLoginorRegisterPage() : Boolean {
-    return this.router.url.includes('/login') || this.router.url.includes('/register') || this.router.url.includes('/reset') || this.router.url === "/";
+  isRoleAdmin() : Boolean {
+    return this.role === "Admin";
   }
 
   logout(){
