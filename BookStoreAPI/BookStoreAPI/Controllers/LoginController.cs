@@ -85,7 +85,7 @@ namespace BookStoreAPI.Controllers
         [Route("refresh")]
         public async Task<IActionResult> RefreshToken(TokenApiDto tokenApiDto) 
         {
-            if (tokenApiDto == null) return BadRequest(new { Message = "Invalid request" });
+            if (tokenApiDto is null || tokenApiDto.AccessToken == "" && tokenApiDto.RefreshToken == "") return BadRequest(new { Message = "Invalid request" });
             string accessToken = tokenApiDto.AccessToken;
             string refreshToken = tokenApiDto.RefreshToken;
 
@@ -256,8 +256,6 @@ namespace BookStoreAPI.Controllers
 
         }
 
-
-        
 
     }
 }

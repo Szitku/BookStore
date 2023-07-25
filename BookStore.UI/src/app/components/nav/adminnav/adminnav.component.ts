@@ -23,7 +23,6 @@ export class AdminnavComponent implements OnInit {
       this.userstore.getRoleFromStore().subscribe(indrole => {
         let rolefromtoken = this.auth.getRoleFromToken();
         this.role = indrole || rolefromtoken;
-        console.log(this.role);
       });
   }
 

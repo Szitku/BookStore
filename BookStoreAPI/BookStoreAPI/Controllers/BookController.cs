@@ -61,7 +61,7 @@ namespace BookStoreAPI.Controllers
         [Route("getBookbyId/{id}")]
         public async Task<IActionResult> getBookbyId(int id)
         {
-            Book book = await _dataContext.Books.FirstAsync(x => x.Id == id);
+            Book book = await _dataContext.Books.FirstOrDefaultAsync(x => x.Id == id);
             if (book == null) {
                 return BadRequest(new {Message = "Book not found!"});
             }

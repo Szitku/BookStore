@@ -10,23 +10,32 @@ import { authGuard } from './guards/auth.guard';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
 import { ResetComponent } from './components/auth/reset/reset.component';
 import { FrontpageComponent } from './components/store/frontpage/frontpage.component';
+import { loggedinguardGuard } from './guards/loggedinguard.guard';
+import { ViewbookComponent } from './components/store/viewbook/viewbook.component';
 
 const routes: Routes = [
   {
      path: '', 
-     component: FrontpageComponent,
+     component: FrontpageComponent
+  },
+  {
+    path: "viewbook/:id",
+    component:ViewbookComponent
   },
   {
     path: 'login',
-    component:LoginComponent
+    component:LoginComponent,
+    canActivate:[loggedinguardGuard]
   },
   {
     path: 'register',
-    component:RegisterComponent
+    component:RegisterComponent,
+    canActivate:[loggedinguardGuard]
   },
   {
     path: 'reset',
-    component:ResetComponent
+    component:ResetComponent,
+    canActivate:[loggedinguardGuard]
   },
   {
     path: 'books',

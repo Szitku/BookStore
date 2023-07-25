@@ -18,6 +18,7 @@ import { UsersListComponent } from './components/users/users-list/users-list.com
 import { Tokeninterceptor } from './interceptors/token.interceptor';
 import { ResetComponent } from './components/auth/reset/reset.component';
 import { FrontpageComponent } from './components/store/frontpage/frontpage.component';
+import { ViewbookComponent } from './components/store/viewbook/viewbook.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { FrontpageComponent } from './components/store/frontpage/frontpage.compo
     AdminnavComponent,
     UsersListComponent,
     ResetComponent,
-    FrontpageComponent
+    FrontpageComponent,
+    ViewbookComponent
 
   ],
   imports: [

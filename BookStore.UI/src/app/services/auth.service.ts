@@ -87,7 +87,7 @@ export class AuthService {
   }
 
   getIdFromToken() : number{
-    if(this.userPayLoad && typeof(this.userPayLoad.nameid) === 'number') return this.userPayLoad.number
+    if(this.userPayLoad && typeof(this.userPayLoad.nameid) === 'string') return parseInt(this.userPayLoad.nameid)
     return 0;
   }
 

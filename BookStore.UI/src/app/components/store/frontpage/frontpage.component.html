@@ -1,1 +1,25 @@
-<p>frontpage works!</p>
+<div class="container mt-5">
+    <div class="container" *ngIf="books && books.length > 0">
+        <div class="card text-center" style="width: 11rem;" *ngFor="let book of books">
+            <img class="card-img-top" src="{{book.cover}}" alt="Card image cap">
+            <div class="card-header ">
+                <h5 class="card-title">{{book.title}}</h5>
+                <p class="card-text"></p>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Author:</h5>
+                <p class="card-text">{{book.author}}</p>
+            </div>
+            <div class="card-footer">
+                <p class="card-text">Price {{book.price}} ft</p>
+                <a [routerLink]="['viewbook',book.id]" class="card-link">View Details</a>
+                <a class="btn btn-primary" (click)="addCart(book)">Add to cart</a>
+            </div>
+        </div>
+    </div> 
+    <p *ngIf="!books || books.length <= 0">Books were not found</p>
+</div>
+
+
+
+

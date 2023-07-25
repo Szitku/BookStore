@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit{
           this.userstore.setNameFromStore(tokenPayload.unique_name);
           this.userstore.setRoleFromStore(tokenPayload.role);
           this.userstore.setIdFromStore(tokenPayload.nameid);
-        
+          
           if(tokenPayload.role === 'Admin'){
             this.router.navigate(["/books"]);
           } else {
