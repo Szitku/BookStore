@@ -1,6 +1,6 @@
 .outer{
     height: 100vh;
-    background: linear-gradient(45deg,#ffffff 50%, #ff9742 90%) no-repeat;
+    background: linear-gradient(45deg,#ffffff 50%, #5c5c5c 90%) no-repeat;
 }
 
 .panel-heading{
@@ -44,7 +44,7 @@ a:hover{
     align-items: center;
     cursor: pointer;
     border: 1px solid #ddd;
-    color: #ff9742;
+    color: #5c5c5c;
 }
 
 .input-field.error{

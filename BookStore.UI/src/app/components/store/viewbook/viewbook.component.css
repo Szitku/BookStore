@@ -1,0 +1,9 @@
+.bookheader{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.bookheadercontent {
+    text-align: center;
+}

@@ -1,1 +1,20 @@
-<p>viewbook works!</p>
+<div class="container my-3" *ngIf="bookfound">
+    <div class="bookheader">
+        <img src="{{book.cover}}" alt="{{book.title}}">
+        <div class="bookheadercontent">
+            <h1>{{book.title}}</h1>
+            <h5>Author:</h5>
+            <p>{{book.author}}</p>
+        </div>
+    </div>
+    <div class="bookbody">
+        <h5>Synopsis:</h5>
+        <p>{{book.synopsis}}</p>
+    </div>
+    <div class="bookfooter">
+        <h5>Price:</h5>
+        <p>{{book.price}} Ft</p>
+        <button class="btn btn-primary" (click)="addCart(book)">Buy</button>
+    </div>
+</div>
+<p class="my-3" *ngIf="!bookfound">This book couldn't be found</p>
