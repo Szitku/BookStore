@@ -1,6 +1,7 @@
 <ng-container *ngIf="isRoleAdmin()">
-  <nav class="navbar nav-underline navbar-dark bg-dark">
-      <a class="navbar-brand fw-bold" routerLink="">
+  <nav class="navbar nav-underline navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand fw-bold">
         <i class="fa fa-book"></i>
         BookStore</a>
         <ul class="navbar-nav">
@@ -16,13 +17,14 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="users">Users</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled white">Hello, {{name}}!</a>
-          </li>
-          <li class="nav-item" *ngIf="loggedin()">
-            <button class="button nav-link white" (click)="logout()" >Logout</button>
+          <li *ngIf="isloggedin()">
+            <button class="button nav-link white" (click)="logout()">Logout</button>
           </li>
         </ul>
+        <span class="navbar-text white" *ngIf="isloggedin()">
+            Hello, {{name}}!
+        </span>
+    </div>
   </nav>
 </ng-container>
 

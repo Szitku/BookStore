@@ -12,6 +12,7 @@ import { ResetComponent } from './components/auth/reset/reset.component';
 import { FrontpageComponent } from './components/store/frontpage/frontpage.component';
 import { loggedinguardGuard } from './guards/loggedinguard.guard';
 import { ViewbookComponent } from './components/store/viewbook/viewbook.component';
+import { CartComponent } from './components/store/cart/cart.component';
 
 const routes: Routes = [
   {
@@ -61,6 +62,10 @@ const routes: Routes = [
     path: 'users',
     component:UsersListComponent,
     canActivate:[authGuard]
+  },
+  {
+    path: 'cart',
+    component:CartComponent
   }
 ];
 

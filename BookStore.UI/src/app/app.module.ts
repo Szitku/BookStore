@@ -19,6 +19,7 @@ import { Tokeninterceptor } from './interceptors/token.interceptor';
 import { ResetComponent } from './components/auth/reset/reset.component';
 import { FrontpageComponent } from './components/store/frontpage/frontpage.component';
 import { ViewbookComponent } from './components/store/viewbook/viewbook.component';
+import { CartComponent } from './components/store/cart/cart.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { ViewbookComponent } from './components/store/viewbook/viewbook.componen
     UsersListComponent,
     ResetComponent,
     FrontpageComponent,
-    ViewbookComponent
+    ViewbookComponent,
+    CartComponent
 
   ],
   imports: [

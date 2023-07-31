@@ -34,7 +34,7 @@ export class AdminnavComponent implements OnInit {
     this.auth.logout();
   }
 
-  loggedin() : boolean{
+  isloggedin() : boolean{
     return this.auth.isLoggedIn();
   }
 }
