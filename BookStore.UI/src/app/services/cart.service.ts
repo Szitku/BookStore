@@ -19,10 +19,31 @@ export class CartService {
     if(!orders.has(book)){
       orders.set(book,amount);
     }else{
-      let old = orders.get(book) ?? 0;
-      orders.set(book,old + amount);
+      let oldvalue = orders.get(book) ?? 0;
+      orders.set(book,oldvalue + amount);
     }
     this.orders$.next(orders);
   }
+
+  public removeAmountOrder(book : Book) : void {
+    let orders = this.orders$.getValue();
+    
+    let oldvalue = orders.get(book) ?? 0;
+    let newvalue = oldvalue - 1;
+
+    if(newvalue <= 0){
+      orders.delete(book);
+    } else {
+      orders.set(book,newvalue);
+    }
+    this.orders$.next(orders);
+  }
+
+  public deleteOrder(book : Book) : void {
+    let orders = this.orders$.getValue();
+    orders.delete(book);
+    this.orders$.next(orders);
+  }
+
 
 }
