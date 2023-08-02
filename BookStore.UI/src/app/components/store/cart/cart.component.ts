@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Book } from 'src/app/models/bookmodel';
 import { CartService } from 'src/app/services/cart.service';
 
@@ -19,6 +19,10 @@ export class CartComponent implements OnInit {
         this.orders = ordermap;
       }
     }})
+  }
+
+  buyOrder(orders : Map<Book,number>){
+    
   }
 
   addOneOrderAmount(book : Book):void{

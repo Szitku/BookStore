@@ -25,11 +25,6 @@ export class FrontpageComponent implements OnInit {
         this.toast.error({detail:"Error",summary:err.message,duration:3000});
       }
     })
-    this.cart.getOrders().subscribe({
-      next : (Map) => {
-        console.log(Map);
-      }
-    })
   }
 
   addCart(book : Book) : void {

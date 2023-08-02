@@ -15,12 +15,14 @@ export class CartService {
 
   public addOrder(book : Book,amount : number) : void{
     let orders = this.orders$.getValue();
+
     if(!orders.has(book)){
       orders.set(book,amount);
     }else{
       let oldvalue = orders.get(book) ?? 0;
       orders.set(book,oldvalue + amount);
     }
+    console.log(orders);
     this.orders$.next(orders);
   }
 
