@@ -1,1 +1,21 @@
-<p>cart works!</p>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col">Title</th>
+                <th class="col">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of mapToArray(orders)">
+                <td>{{order.key.title}}</td>
+                <td>
+                    <button (click)="addOneOrderAmount(order.key)">+</button>
+                    {{order.value}}
+                    <button (click)="removeOneOrderAmount(order.key)">-</button>
+                    <button (click)="deleteOrder(order.key)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
