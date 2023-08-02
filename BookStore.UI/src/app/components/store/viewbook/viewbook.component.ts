@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Book } from 'src/app/models/bookmodel';
 import { BooksService } from 'src/app/services/books.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-viewbook',
@@ -12,7 +13,7 @@ export class ViewbookComponent implements OnInit {
 
   book : Book = {} as Book;
   bookfound : boolean = false;
-  constructor(private BookService : BooksService, private route : ActivatedRoute){}
+  constructor(private BookService : BooksService, private route : ActivatedRoute,private cart : CartService){}
   
   ngOnInit(): void {
     this.route.paramMap.subscribe({
@@ -36,7 +37,9 @@ export class ViewbookComponent implements OnInit {
   }
 
   addCart(book : Book) : void {
-
+    this.cart.addOrder(book,1);
   }
+
+  
 
 }

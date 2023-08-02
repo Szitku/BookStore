@@ -14,7 +14,8 @@
     <div class="bookfooter">
         <h5>Price:</h5>
         <p>{{book.price}} Ft</p>
-        <button class="btn btn-primary" (click)="addCart(book)">Buy</button>
+        <button class="btn btn-outline-secondary" (click)="addCart(book)">Add to cart</button>
+        <button class="btn btn-outline-primary pl-1">Buy</button>
     </div>
 </div>
 <p class="my-3" *ngIf="!bookfound">This book couldn't be found</p>

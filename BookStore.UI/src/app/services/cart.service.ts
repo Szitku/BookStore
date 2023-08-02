@@ -7,7 +7,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class CartService {
   private orders$ = new BehaviorSubject<Map<Book,number>>(new Map<Book,number>());
-
   constructor() { }
 
   public getOrders() : Observable<Map<Book,number>>{
