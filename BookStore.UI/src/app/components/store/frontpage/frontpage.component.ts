@@ -11,7 +11,7 @@ import { CartService } from 'src/app/services/cart.service';
 })
 export class FrontpageComponent implements OnInit {
   
-  books: Book[] = []
+  books: Book[] = [];
 
   constructor(private BookService : BooksService,private toast : NgToastService, private cart : CartService){}
 
