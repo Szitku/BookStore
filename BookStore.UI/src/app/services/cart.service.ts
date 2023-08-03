@@ -2,28 +2,28 @@ import { Injectable } from '@angular/core';
 import { Book } from '../models/bookmodel';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private orders$ = new BehaviorSubject<Map<Book,number>>(new Map<Book,number>());
+  private orders$ = new BehaviorSubject<Map<string,number>>(new Map<string,number>());
   constructor() { }
 
-  public getOrders() : Observable<Map<Book,number>>{
+  public getOrders() : Observable<Map<string,number>>{
     return this.orders$.asObservable();
   }
 
+
   public addOrder(book : Book,amount : number) : void{
     let orders = this.orders$.getValue();
+    let stringBook = JSON.stringify(book);
 
-    if(!orders.has(book)){
-      orders.set(book,amount);
+
+    if(!orders.has(stringBook)){
+      orders.set(stringBook,amount);
     }else{
-      let oldvalue = orders.get(book) ?? 0;
-      orders.set(book,oldvalue + amount);
+      let oldvalue = orders.get(stringBook) ?? 0;
+      orders.set(stringBook,oldvalue + amount);
     }
     console.log(orders);
     this.orders$.next(orders);
@@ -31,21 +31,24 @@ export class CartService {
 
   public removeAmountOrder(book : Book) : void {
     let orders = this.orders$.getValue();
-    
-    let oldvalue = orders.get(book) ?? 0;
+    let stringBook = JSON.stringify(book);
+    console.log(orders);
+    let oldvalue = orders.get(stringBook) ?? 0;
     let newvalue = oldvalue - 1;
 
     if(newvalue <= 0){
-      orders.delete(book);
+      orders.delete(stringBook);
     } else {
-      orders.set(book,newvalue);
+      orders.set(stringBook,newvalue);
     }
     this.orders$.next(orders);
   }
 
   public deleteOrder(book : Book) : void {
     let orders = this.orders$.getValue();
-    orders.delete(book);
+    let stringBook = JSON.stringify(book);
+
+    orders.delete(stringBook);
     this.orders$.next(orders);
   }
 

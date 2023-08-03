@@ -20,7 +20,11 @@ export class CartComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     this.ordersSub = this.cart.getOrders().subscribe({next : (ordermap) => {
       if(ordermap){
-        this.orders = ordermap;
+        this.orders.clear();
+        for(let [key,value] of ordermap){
+          const book : Book = JSON.parse(key);
+          this.orders.set(book,value);
+        }
       }
     }})
 
